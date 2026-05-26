@@ -2,19 +2,20 @@ name: Automation Test CRM
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
-      # 1. Checkout repo
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Setup Java (WAJIB pakai versi stable, jangan SHA)
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -22,21 +23,8 @@ jobs:
           java-version: 17
           cache: gradle
 
-      # 3. Cache Gradle (biar lebih cepat & stabil)
-      - name: Setup Gradle cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            gradle-${{ runner.os }}-
-
-      # 4. Grant permission (optional tapi sering membantu di Linux runner)
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      # 5. Run test
       - name: Run tests
         run: ./gradlew clean test
