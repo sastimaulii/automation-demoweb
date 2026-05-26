@@ -1,0 +1,49 @@
+name: Automation Test (API + WEB)
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Grant permission
+        run: chmod +x gradlew
+
+      - name: Run All Tests (API + WEB)
+        run: ./gradlew clean test
+
+      - name: Show Test Result Debug
+        if: always()
+        run: cat build/test-results/test/*.xml || true
+
+      # 📊 CUCUMBER REPORT
+      - name: Upload Cucumber Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cucumber-report
+          path: build/reports/
+
+      # 📦 JSON REPORT (CI / Allure ready)
+      - name: Upload Cucumber JSON
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cucumber-json
+          path: build/cucumber.json
