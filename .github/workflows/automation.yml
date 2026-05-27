@@ -1,54 +1,70 @@
 name: Automation Test
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ main ]
   pull_request:
 
-permissions:
-  contents: read
-
 jobs:
-  test:
+  web-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: FORCE CHECK FILE
-      - if: always()
-      - run: |
-      - echo "===== ROOT ====="
-      - pwd
-      - ls -la
-
-      - echo "===== FIND BUILD ====="
-      - find . -type d -name build || echo "NO BUILD DIR"
-
-      - echo "===== FIND HTML ====="
-      - find . -name "*.html" || echo "NO HTML FILE"
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: 17
+          distribution: 'temurin'
+          java-version: '17'
 
-      - name: Setup Chrome
-        uses: browser-actions/setup-chrome@v1
+      - name: Grant permission
+        run: chmod +x gradlew
 
-      - name: Run API Test
-        run: ./gradlew apiTest --info
-
+      # 🔥 RUN WEB TEST ONLY
       - name: Run Web Test
-        run: ./gradlew webTest --info
+        run: ./gradlew webTest
 
-      - name: Debug - check files
+      - name: Debug Web
         if: always()
-        run: ls -R
+        run: find . -name "*.html"
 
-      - name: Upload Cucumber Report
+      - name: Upload Web Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cucumber-report
-          path: build/
+          name: web-report
+          path: build/**/*.html
+
+
+  api-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Grant permission
+        run: chmod +x gradlew
+
+      # 🔥 RUN API TEST ONLY
+      - name: Run API Test
+        run: ./gradlew apiTest
+
+      - name: Debug API
+        if: always()
+        run: find . -name "*.html"
+
+      - name: Upload API Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-report
+          path: build/**/*.html
