@@ -1,3 +1,4 @@
+@web
 Feature: E2E Customer Flow
 
   Scenario: User login and view product list

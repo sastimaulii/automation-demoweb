@@ -1,3 +1,4 @@
+@web
 Feature: Login Test
 
   Scenario: Successful login with valid credentials

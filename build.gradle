@@ -17,16 +17,42 @@ ext {
 }
 
 dependencies {
-    testImplementation 'io.cucumber:cucumber-java:7.14.0'
-    testImplementation 'io.cucumber:cucumber-junit:7.14.0'
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation 'io.rest-assured:rest-assured:5.4.0'
-    testImplementation 'org.seleniumhq.selenium:selenium-java:4.21.0'
-    testImplementation 'io.github.bonigarcia:webdrivermanager:5.7.0'
+    testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-junit:${cucumberVersion}"
+    testImplementation "junit:junit:${junitVersion}"
+    testImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
+    testImplementation "org.seleniumhq.selenium:selenium-java:${seleniumVersion}"
+    testImplementation "io.github.bonigarcia:webdrivermanager:5.7.0"
 }
 
 test {
     useJUnit()
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+/**
+ * ✅ TASK: API TEST
+ */
+tasks.register('apiTest', Test) {
+    useJUnit()
+
+    systemProperty "cucumber.filter.tags", "@api"
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+/**
+ * ✅ TASK: WEB TEST
+ */
+tasks.register('webTest', Test) {
+    useJUnit()
+
+    systemProperty "cucumber.filter.tags", "@web"
 
     testLogging {
         events "passed", "skipped", "failed"
