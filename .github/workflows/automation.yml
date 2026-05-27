@@ -1,30 +1,36 @@
 name: Automation Test CRM
 
 on:
-  push:
-    branches: ["main"]
+  workflow_dispatch:
   pull_request:
+
+permissions:
+  contents: read   # 👈 penting
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
-          cache: gradle
 
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
+      - name: Run API Test
+        run: ./gradlew apiTest
 
-      - name: Run tests
-        run: ./gradlew clean test
+      - name: Run Web Test
+        run: ./gradlew webTest
+
+      - name: Upload Cucumber Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: cucumber-report
+          path: reports/
