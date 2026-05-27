@@ -3,37 +3,50 @@ name: Automation Test
 on:
   push:
     branches: [ "main" ]
+  pull_request:
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout repo
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 2. Setup Java
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Run API Test
-        run: ./gradlew apiTest
+      # 3. permission gradlew
+      - name: Grant execute permission
+        run: chmod +x gradlew
 
-      - name: Run Web Test
+      # 4A. Run API Test
+      - name: Run API Tests
+        run: ./gradlew clean apiTest
+
+      # 4B. Run WEB / E2E Test
+      - name: Run Web Tests
         run: ./gradlew webTest
 
-      - name: Upload API Report
+      # 5. DEBUG
+      - name: Debug build folder
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: api-report
-          path: build/reports/api/
+        run: |
+          echo "=== CHECK BUILD FOLDER ==="
+          ls -R build || echo "BUILD FOLDER NOT FOUND"
 
-      - name: Upload Web Report
+      # 6. Upload All Report
+      - name: Upload Test Reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: web-report
-          path: build/reports/web/
+          name: test-reports
+          path: |
+            build/**/*.html
+            build/**/*.json
+            build/**/*.xml
