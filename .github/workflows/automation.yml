@@ -1,4 +1,4 @@
-name: Automation Test CRM
+name: Automation Test
 
 on:
   workflow_dispatch:

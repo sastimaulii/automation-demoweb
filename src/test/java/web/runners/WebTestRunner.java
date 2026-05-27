@@ -8,7 +8,8 @@ import io.cucumber.junit.CucumberOptions;
 @CucumberOptions(
         features = "src/test/resources/web.features",
         glue = "web.steps",
-        plugin = {"pretty", "html:target/web-report.html"}
+        tags = "@web",
+        plugin = {"pretty", "html:build/web-report.html"}
 )
 public class WebTestRunner {
 }

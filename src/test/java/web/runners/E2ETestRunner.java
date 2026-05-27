@@ -8,7 +8,8 @@ import io.cucumber.junit.CucumberOptions;
 @CucumberOptions(
         features = "src/test/resources/web.features/e2e_customer.feature",
         glue = "web.steps",
-        plugin = {"pretty", "html:target/e2e-report.html"}
+        tags = "@web",
+        plugin = {"pretty", "html:build/e2e-report.html"}
 )
 public class E2ETestRunner {
 }

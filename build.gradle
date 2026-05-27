@@ -41,18 +41,19 @@ tasks.register('apiTest', Test) {
 
     systemProperty "cucumber.filter.tags", "@api"
 
+    include '**/api/runners/*Runner.class'
+
     testLogging {
         events "passed", "skipped", "failed"
     }
 }
 
-/**
- * ✅ TASK: WEB TEST
- */
 tasks.register('webTest', Test) {
     useJUnit()
 
     systemProperty "cucumber.filter.tags", "@web"
+
+    include '**/web/runners/*Runner.class'
 
     testLogging {
         events "passed", "skipped", "failed"
