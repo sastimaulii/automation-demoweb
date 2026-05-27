@@ -47,5 +47,5 @@ jobs:
         with:
           name: test-reports
           path: |
-            build/**/*.html
-            target/**/*.html
+            reports/**/*.html
+            reports/**/*.json
