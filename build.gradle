@@ -36,26 +36,26 @@ test {
 /**
  * ✅ TASK: API TEST
  */
-tasks.register('webTest', Test) {
-    useJUnit()
-
-    systemProperty "cucumber.filter.tags", "@web"
-
-    include '**/*Runner.class'   // 🔥 WAJIB
-
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
-}
-
 tasks.register('apiTest', Test) {
     useJUnit()
-
     systemProperty "cucumber.filter.tags", "@api"
 
-    include '**/*Runner.class'   // 🔥 WAJIB
-
-    testLogging {
-        events "passed", "skipped", "failed"
+    reports {
+        html.required = true
+        junitXml.required = true
     }
+
+    include '**/*Runner.class'
+}
+
+tasks.register('webTest', Test) {
+    useJUnit()
+    systemProperty "cucumber.filter.tags", "@web"
+
+    reports {
+        html.required = true
+        junitXml.required = true
+    }
+
+    include '**/*Runner.class'
 }
