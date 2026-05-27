@@ -36,24 +36,24 @@ test {
 /**
  * ✅ TASK: API TEST
  */
-tasks.register('apiTest', Test) {
+tasks.register('webTest', Test) {
     useJUnit()
 
-    systemProperty "cucumber.filter.tags", "@api"
+    systemProperty "cucumber.filter.tags", "@web"
 
-    include '**/api/runners/*Runner.class'
+    include '**/*Runner.class'   // 🔥 WAJIB
 
     testLogging {
         events "passed", "skipped", "failed"
     }
 }
 
-tasks.register('webTest', Test) {
+tasks.register('apiTest', Test) {
     useJUnit()
 
-    systemProperty "cucumber.filter.tags", "@web"
+    systemProperty "cucumber.filter.tags", "@api"
 
-    include '**/web/runners/*Runner.class'
+    include '**/*Runner.class'   // 🔥 WAJIB
 
     testLogging {
         events "passed", "skipped", "failed"

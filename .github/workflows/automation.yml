@@ -12,6 +12,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: FORCE CHECK FILE
+      - if: always()
+      - run: |
+      - echo "===== ROOT ====="
+      - pwd
+      - ls -la
+
+      - echo "===== FIND BUILD ====="
+      - find . -type d -name build || echo "NO BUILD DIR"
+
+      - echo "===== FIND HTML ====="
+      - find . -name "*.html" || echo "NO HTML FILE"
       - name: Checkout code
         uses: actions/checkout@v4
 
