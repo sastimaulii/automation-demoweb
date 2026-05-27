@@ -25,6 +25,9 @@ dependencies {
     testImplementation "io.github.bonigarcia:webdrivermanager:5.7.0"
 }
 
+/**
+ * ✅ DEFAULT TEST (optional)
+ */
 test {
     useJUnit()
 
@@ -38,24 +41,35 @@ test {
  */
 tasks.register('apiTest', Test) {
     useJUnit()
+
+    description = "Run API Cucumber Tests"
+    group = "verification"
+
+
     systemProperty "cucumber.filter.tags", "@api"
 
-    reports {
-        html.required = true
-        junitXml.required = true
-    }
 
-    include '**/*Runner.class'
+    include '**/*TestRunner.class'
+
+    testLogging {
+        events "passed", "skipped", "failed", "standard_out"
+    }
 }
 
+/**
+ * ✅ TASK: WEB TEST
+ */
 tasks.register('webTest', Test) {
     useJUnit()
+
+    description = "Run WEB Cucumber Tests"
+    group = "verification"
+
     systemProperty "cucumber.filter.tags", "@web"
 
-    reports {
-        html.required = true
-        junitXml.required = true
-    }
+    include '**/*TestRunner.class'
 
-    include '**/*Runner.class'
+    testLogging {
+        events "passed", "skipped", "failed", "standard_out"
+    }
 }

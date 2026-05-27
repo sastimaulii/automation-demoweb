@@ -6,10 +6,15 @@ import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        features = "src/test/resources/web.features/e2e_customer.feature",
-        glue = "web.steps",
+        features = "classpath:web/features",
+        glue = {"web.steps", "web.hooks"},
         tags = "@web",
-        plugin = {"pretty", "html:build/e2e-report.html"}
+        plugin = {
+                "pretty",
+                "html:build/reports/e2e-report.html",
+                "json:build/reports/e2e-report.json"
+        },
+        monochrome = true
 )
 public class E2ETestRunner {
 }
