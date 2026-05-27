@@ -2,11 +2,10 @@ name: Automation Test
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  web-test:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,52 +18,22 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Grant permission
-        run: chmod +x gradlew
-
-      # 🔥 RUN WEB TEST ONLY
-      - name: Run Web Test
-        run: ./gradlew webTest
-
-      - name: Debug Web
-        if: always()
-        run: find . -name "*.html"
-
-      - name: Upload Web Report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: web-report
-          path: build/**/*.html
-
-
-  api-test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: Grant permission
-        run: chmod +x gradlew
-
-      # 🔥 RUN API TEST ONLY
       - name: Run API Test
         run: ./gradlew apiTest
 
-      - name: Debug API
-        if: always()
-        run: find . -name "*.html"
+      - name: Run Web Test
+        run: ./gradlew webTest
 
       - name: Upload API Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: api-report
-          path: build/**/*.html
+          path: build/reports/api/
+
+      - name: Upload Web Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-report
+          path: build/reports/web/
